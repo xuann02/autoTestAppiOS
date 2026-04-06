@@ -1,0 +1,20 @@
+appId: "com.abc.asvabtest"
+---
+- runScript: appiOS.js
+
+- repeat:
+    while:
+      true: ${output.done != true}
+    commands:
+      # - stopApp: ${output.appId}
+      - clearState: ${output.appId}
+
+      - launchApp:
+          appId: ${output.appId}
+          # clearState: true
+      - runFlow:
+          file: appModul.yaml
+          env:
+            appId: ${output.appId}
+
+      - runScript: appiOS.js

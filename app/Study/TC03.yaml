@@ -1,0 +1,45 @@
+appId: ${appId}
+---
+# 3.1 Click button Continue màn result
+- tapOn: Continue
+- repeat:
+    times: 2
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "mst-Answer-Correct"
+          direction: DOWN
+      - repeat:
+          while:
+            notVisible:
+              text: "Explanation:"
+          commands:
+            - tapOn:
+                id: "mst-Answer-Correct"
+      - runFlow: ../ClosePopup/CloseBadge.yaml
+      - tapOn: "Continue"
+
+- tapOn: 
+    id: mst-Back
+- runFlow: ../ClosePopup/ClosePopup.yaml
+
+- assertVisible: Theory
+- tapOn: Continue
+
+- repeat:
+    while:
+      notVisible: "Try Again"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "mst-Answer-Correct"
+          direction: DOWN
+      - repeat:
+          while:
+            notVisible:
+              text: "Explanation:"
+          commands:
+            - tapOn:
+                id: "mst-Answer-Correct"
+      - runFlow: ../ClosePopup/CloseBadge.yaml
+      - tapOn: "Continue"

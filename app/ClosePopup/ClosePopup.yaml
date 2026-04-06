@@ -1,0 +1,26 @@
+appId: ${appId}
+---
+- repeat:
+    times: 2
+    commands:
+      - tapOn:
+          text: "Not now"
+          optional: true
+      - tapOn:
+          text: "Scrim"
+          optional: true
+      - tapOn:
+          text: ".*Close.*"
+          optional: true
+      - tapOn:
+          text: ".*Skip video.*"
+          optional: true
+      - tapOn:
+          id: "close-button"
+          optional: true
+      - tapOn:
+          text: "Keep earning Token"
+          optional: true
+      - tapOn:
+          text: "Continue to app"
+          optional: true

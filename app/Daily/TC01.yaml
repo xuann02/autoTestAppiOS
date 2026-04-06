@@ -1,0 +1,10 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+# Check button Daily + click
+- tapOn: 
+      text: "Study.*"
+      id: home-study-tab-btn
+- assertVisible: Daily Challenge
+- tapOn: Daily Challenge

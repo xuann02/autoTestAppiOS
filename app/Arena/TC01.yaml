@@ -1,0 +1,10 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+      text: "Arena.*"
+      id: home-account-tab-btn
+
+# check popup Heart
+- assertVisible: Start -1

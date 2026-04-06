@@ -1,0 +1,12 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+      text: "Study.*"
+      id: home-study-tab-btn
+- assertVisible:
+    text: ".*Passing Probability.*"
+
+- tapOn:
+    text: ".*Passing Probability.*"

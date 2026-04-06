@@ -1,0 +1,21 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: Study
+- assertVisible:
+    id: icon-Menu
+- tapOn:
+    id: icon-Menu
+# Vào màn Login
+- assertVisible:
+    id: mst-Login
+- tapOn:
+    id: mst-Login
+
+# login verify code
+# - tapOn: Please type your email address!
+# - inputText: "testerabc48@gmail.com"
+- tapOn: Request Code
+# - inputText: ${OTP}
+# - tapOn: Submit

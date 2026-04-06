@@ -1,0 +1,54 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+      text: "Study.*"
+      id: home-study-tab-btn
+
+- swipe:
+    start: 30%, 50% # Điểm bắt đầu (tính theo % màn hình hoặc pixel)
+    end: 80%, 100%
+    
+# 2. Chọn 1 topic bất kì để làm
+# case 1: app có topic để click
+- tapOn:
+    below: "Daily Challenge"
+    text: ".*%"
+    # index: 3
+    optional: true
+
+# nếu có Continue → là case topic
+- repeat:
+    while:
+      visible: "Theory"
+    commands:
+      - tapOn:
+          text: Continue
+          optional: true
+
+# Case 2: app dạng Core map (không có topic list)
+- tapOn:
+    text: ".*Core 1"
+    optional: true
+
+- repeat:
+    while:
+      notVisible: "Try Again"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "mst-Answer-Correct"
+          direction: DOWN
+      - repeat:
+          while:
+            notVisible:
+              text: "Explanation:"
+          commands:
+            - tapOn:
+                id: "mst-Answer-Correct"
+      - runFlow: ../ClosePopup/CloseBadge.yaml
+      - tapOn: "Continue"
+
+# tắt popup đi
+- runFlow: ../ClosePopup/ClosePopup.yaml

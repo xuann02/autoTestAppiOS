@@ -1,0 +1,41 @@
+appId: ${appId}
+---
+# 3.2 Click button Try again mản result
+- tapOn: Try Again
+# popup try again
+- tapOn:
+    text: Dismiss
+- tapOn: Try Again
+- tapOn: Confirm
+
+- repeat:
+    while:
+      notVisible: "Try Again"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "mst-Answer-Correct"
+          direction: DOWN
+      - repeat:
+          while:
+            notVisible:
+              text: "Explanation:"
+          commands:
+            - tapOn:
+                id: "mst-Answer-Correct"
+      - runFlow: ../ClosePopup/CloseBadge.yaml
+      - tapOn: "Continue"
+
+# Nếu hiển thị popup thì tắt đi
+- runFlow: ../ClosePopup/ClosePopup.yaml
+
+# back về màn topic
+- tapOn: 
+    id: mst-Back
+
+# Nếu hiển thị popup thì tắt đi
+- runFlow: ../ClosePopup/ClosePopup.yaml
+
+# back về màn Home
+- tapOn: 
+    id: mst-Back

@@ -1,0 +1,158 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+      text: "Study.*"
+      id: home-study-tab-btn
+
+# 1. Check hiển thị màn passing
+- tapOn:
+    text: ".*Passing Probability.*"
+
+# 2. button Cancel màn chọn number question game
+- tapOn: Improve Overall Score
+- runFlow:
+    commands:
+      # hiển thị màn mua
+      - assertVisible: Pass For The First Time With
+      - tapOn: mst-Close
+    optional: true
+
+- runFlow:
+    commands:
+      # hiển thị bottom sheet chọn number questions
+      - tapOn: Cancel
+
+      # 3.  button Start màn chọn number question game
+      - tapOn: Improve Overall Score
+      # Default : 20 questions
+      - tapOn: Start
+
+      # 4. Vào màn game
+      - repeat:
+          while:
+            notVisible: "SUBMIT"
+          commands:
+            #  1. Scroll đảm bảo load answer
+            - scrollUntilVisible:
+                element:
+                  id: "mst-Answer.*"
+                  index: 0
+                direction: DOWN
+
+            # 2. Đếm số đáp án (max = 7)
+            - evalScript: ${output.total = 0}
+
+            - repeat:
+                times: 7
+                commands:
+                  - runFlow:
+                      when:
+                        visible:
+                          id: "mst-Answer.*"
+                          index: ${output.total}
+                      commands:
+                        - evalScript: ${output.total = output.total + 1}
+
+            # 3. Copy text nếu có multiple
+            - evalScript: ${output.hasMultiple = false}
+            - evalScript: ${output.copiedText = ""}
+
+            - runFlow:
+                when:
+                  visible: "Chosen answers:.*"
+                commands:
+                  - copyTextFrom:
+                      text: "Chosen answers:.*"
+                  - evalScript: ${output.hasMultiple = true}
+                  - evalScript: ${output.copiedText = maestro.copiedText} # Lưu lại text đã copy
+
+            - runScript:
+                file: ../Daily/randomAnswer.js
+                env:
+                  total: ${output.total}
+                  hasMultiple: ${output.hasMultiple}
+                  copiedText: ${output.copiedText}
+
+            - evalScript: ${output.current  = 0}
+
+            # 5. Click các đáp án đã chọn
+            - repeat:
+                times: ${output.required}
+                commands:
+                  - runFlow:
+                      commands:
+                        - tapOn:
+                            id: "mst-Answer.*"
+                            # Maestro sẽ giải mã thành output.idx0, output.idx1...
+                            index: ${output["idx" + output.current ]}
+
+                  - evalScript: ${output.current  = output.current + 1 }
+
+            - runFlow: ../ClosePopup/CloseBadge.yaml
+            - tapOn: "Next"
+              # popup Submit
+      - assertVisible: SUBMIT
+      - tapOn:
+          text: Dismiss
+          index: 1
+
+      # Check button Previous
+      - repeat:
+          while:
+            visible: "Previous"
+          commands:
+            - tapOn: Previous
+
+      # Check icon Submit
+      - tapOn: 
+          id: game-submit-btn      
+      - assertVisible: SUBMIT
+      - tapOn: Confirm
+      # Nếu hiển thị popup thì tắt đi
+      - runFlow: ../ClosePopup/ClosePopup.yaml
+
+      # 5. Màn result passing tổng
+      # 5.1 button Continue game
+      - tapOn: Continue
+      # button Cancel màn chọn number questions game
+      - tapOn: Cancel
+
+      - tapOn: Continue
+      # button Start màn chọn number questions game
+      - tapOn: Start
+
+      - repeat:
+          times: 3
+          commands:
+            - scrollUntilVisible:
+                element:
+                  id: "mst-Answer-Correct"
+                direction: DOWN
+            - repeat:
+                while:
+                  notVisible:
+                    text: "Explanation:"
+                commands:
+                  - tapOn:
+                      id: "mst-Answer-Correct"
+
+            - runFlow: ../ClosePopup/CloseBadge.yaml
+            - tapOn: "Next"
+
+      # Check icon Submit
+      - tapOn: 
+          id: game-submit-btn
+      - assertVisible: SUBMIT
+      - tapOn: Confirm
+      # Nếu hiển thị popup thì tắt đi
+      - runFlow: ../ClosePopup/ClosePopup.yaml
+      # back về màn Passing tổng
+      - tapOn: 
+          id: mst-Back
+
+      # Nếu hiển thị popup thì tắt đi
+      - runFlow: ../ClosePopup/ClosePopup.yaml
+
+    optional: true

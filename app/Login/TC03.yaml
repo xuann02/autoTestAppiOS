@@ -1,0 +1,13 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+# Login apple
+- assertVisible: Log In
+
+- assertVisible:
+    text: "Apple"
+    optional: true
+- tapOn:
+    text: "Apple"
+    optional: true

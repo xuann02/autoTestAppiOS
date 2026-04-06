@@ -1,0 +1,58 @@
+appId: ${appId}
+---
+- runFlow:
+    file: app/Onboarding/TC01.yaml
+    env:
+      appId: ${appId}
+
+# - runFlow: app/Login/login.yaml
+
+# - runFlow:
+#     file: app/Daily/dailyChallenge.yaml
+#     env:
+#       appId: ${appId}
+
+# - runFlow:
+#     file: app/Study/study.yaml
+#     env:
+#       appId: ${appId}
+
+- runFlow:
+    file: app/Audio/TC01.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Passing/passing.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Diagnostic/diagnostic.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Practice/practice.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Final/final.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Custom/custom.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Arena/arena.yaml
+    env:
+      appId: ${appId}
+
+- runFlow:
+    file: app/Token/TC01.yaml
+    env:
+      appId: ${appId}

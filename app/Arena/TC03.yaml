@@ -1,0 +1,38 @@
+appId: ${appId}
+---
+# màn result
+- assertVisible: "Game Over     "
+# button review answers
+- tapOn: Review Your Answers
+# back về màn result
+- tapOn: 
+    id: mst-Back
+
+# button Play Again
+- tapOn: Play Again
+- tapOn: Start -1
+- repeat:
+    times: 5
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: mst-Answer-Correct
+          direction: DOWN
+      - repeat:
+          while:
+            notVisible:
+              text: "Explanation:"
+          commands:
+            - tapOn:
+                id: "mst-Answer-Correct"
+      - runFlow: ../ClosePopup/CloseBadge.yaml
+      - tapOn: "Next"
+
+- tapOn:
+    id: mst-Answer-Incorrect
+
+- assertVisible: Result
+- tapOn: 
+    id: mst-Back
+# Nếu hiển thị popup thì tắt đi
+- runFlow: ../ClosePopup/ClosePopup.yaml

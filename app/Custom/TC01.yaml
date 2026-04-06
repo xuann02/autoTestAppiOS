@@ -1,0 +1,13 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+    text: "Tests.*"
+    id: home-test-tab-btn
+
+- swipe:
+      direction: UP
+
+# 1. Check hiển thị Custom test
+- assertVisible: "Custom Tests "

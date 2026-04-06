@@ -1,0 +1,17 @@
+appId: ${appId}
+---
+# 2.1 Check button Previous
+- repeat:
+    while:
+      visible: "Previous"
+    commands:
+      - tapOn: Previous
+
+# 2.2 Check icon Submit màn game
+- tapOn: 
+    id: game-submit-btn
+- assertVisible: SUBMIT
+- tapOn: Confirm
+
+# Nếu hiển thị popup thì tắt đi
+- runFlow: ../ClosePopup/ClosePopup.yaml

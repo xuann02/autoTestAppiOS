@@ -1,0 +1,15 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+      text: "Study.*"
+      id: home-study-tab-btn
+- tapOn: Daily Challenge
+# back để về màn Home
+- assertVisible: Review your answers
+# button chưa sửa tên
+- tapOn: 
+    id: mst-Back
+
+- runFlow: ../ClosePopup/ClosePopup.yaml

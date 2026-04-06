@@ -1,0 +1,14 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn: 
+    text: "Tests.*"
+    id: home-test-tab-btn
+
+- swipe:
+    direction: UP
+# 1. Check Final
+- assertVisible: Final Test
+- assertVisible:
+    text: "Our final test is the ultimate gauge that assesses your readiness for the actual exam.*"

@@ -1,0 +1,25 @@
+appId: ${appId}
+---
+- launchApp:
+    appId: ${appId}
+- tapOn:
+    text: "Study.*"
+    id: home-study-tab-btn
+- assertVisible:
+    id: icon-Token
+- tapOn:
+    id: icon-Token
+
+# Check hiển thị các gói
+- assertVisible: |-
+    1-Day Pro
+    25
+- assertVisible: |-
+    2-Day Pro
+    45
+- assertVisible: |-
+    3-Day Pro
+    65
+- assertVisible: |-
+    4-Day Pro
+    80
