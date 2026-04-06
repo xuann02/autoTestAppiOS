@@ -4,60 +4,41 @@ import time
 import os
 
 # ================= CONFIGURATION =================
-# Danh sách Bundle ID cho Simulator 1
-APPS_IOS_DEVICE_1 = [
-    "com.abc.ccna"
-]
+# BƯỚC 1: ĐIỀN UDID THẬT CỦA BẠN VÀO ĐÂY
+DEVICE_IOS_1 = "28637C8C-EED7-4D48-ACC7-4B4A332F3E0D"
+DEVICE_IOS_2 = "28225DE3-858A-49E3-8739-518B19980592"
 
-# Danh sách Bundle ID cho Simulator 2
-APPS_IOS_DEVICE_2 = [
-    "com.abc.cna"
-]
+APPS_IOS_DEVICE_1 = ["com.abc.ccna"]
+APPS_IOS_DEVICE_2 = ["com.abc.cna"]
 
-# Thay thế bằng UDID thật của bạn (lấy từ lệnh: xcrun simctl list devices)
-DEVICE_IOS_1 = "53A96484-342B-49DD-86B9-89BEBF4EA2DD"
-DEVICE_IOS_2 = "28637C8C-EED7-4D48-ACC7-4B4A332F3E0D"
-
-# Lấy đường dẫn tuyệt đối của file guardian iOS
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 GUARDIAN_IOS_PATH = os.path.join(SCRIPT_DIR, "maestro_guardian_ios.py")
-# =================================================
 
-def run_ios_apps(device_id, app_list):
-    """Chạy lần lượt các app iOS trong danh sách trên một Simulator cụ thể."""
-    if device_id == "53A96484-342B-49DD-86B9-89BEBF4EA2DD" or device_id == "28637C8C-EED7-4D48-ACC7-4B4A332F3E0D":
-        print(f"\n[⚠️ WARNING] Bạn chưa thay UDID cho thiết bị {device_id}!")
-        return
+def run_ios_apps(device_id, app_list, delay=0):
+    """Chạy app với cơ chế delay start để tránh xung đột driver."""
+    if delay > 0:
+        print(f"[MANAGER] ⏳ Chờ {delay}s cho thiết bị {device_id} khởi động sau...")
+        time.sleep(delay)
 
     for app_id in app_list:
-        print(f"\n[IOS-MANAGER] >>> Bắt đầu test {app_id} trên {device_id}...")
-        
-        # Gọi guardian chuyên cho iOS
+        print(f"\n[IOS-MANAGER] >>> Test {app_id} trên {device_id}...")
         cmd = f"python3 \"{GUARDIAN_IOS_PATH}\" {app_id} {device_id}"
-        
-        try:
-            # Chạy và đợi cho đến khi hoàn thành app hiện tại
-            subprocess.run(cmd, shell=True, check=True)
-        except subprocess.CalledProcessError:
-            print(f"[IOS-MANAGER] ❌ Lỗi khi chạy {app_id} trên {device_id}. Tiếp tục app tiếp theo...")
-        
-        print(f"[IOS-MANAGER] <<< Kết thúc test {app_id} trên {device_id}.")
-        time.sleep(5) # Nghỉ 5s giữa các app để Simulator ổn định
+        subprocess.run(cmd, shell=True)
+        time.sleep(5)
 
 if __name__ == "__main__":
-    print("🚀 Khởi chạy hệ thống test song song trên 2 Simulator iOS...")
-    print(f"📂 Guardian iOS path: {GUARDIAN_IOS_PATH}")
-    print(f"📱 Simulator 1 ({DEVICE_IOS_1}): {len(APPS_IOS_DEVICE_1)} apps")
-    print(f"📱 Simulator 2 ({DEVICE_IOS_2}): {len(APPS_IOS_DEVICE_2)} apps")
+    print("🚀 Khởi chạy hệ thống iOS Parallel (Đã fix xung đột Port)...")
 
-    # Tạo 2 luồng để chạy song song
-    thread1 = threading.Thread(target=run_ios_apps, args=(DEVICE_IOS_1, APPS_IOS_DEVICE_1))
-    thread2 = threading.Thread(target=run_ios_apps, args=(DEVICE_IOS_2, APPS_IOS_DEVICE_2))
+    # Thread 1: Chạy ngay lập tức
+    t1 = threading.Thread(target=run_ios_apps, args=(DEVICE_IOS_1, APPS_IOS_DEVICE_1, 0))
+    
+    # Thread 2: Chờ 15 giây mới bắt đầu (Cực kỳ quan trọng cho iOS)
+    t2 = threading.Thread(target=run_ios_apps, args=(DEVICE_IOS_2, APPS_IOS_DEVICE_2, 15))
 
-    thread1.start()
-    thread2.start()
+    t1.start()
+    t2.start()
 
-    thread1.join()
-    thread2.join()
+    t1.join()
+    t2.join()
 
-    print("\n✅ TẤT CẢ SIMULATOR ĐÃ HOÀN THÀNH TEST LIST.")
+    print("\n✅ TẤT CẢ SIMULATOR ĐÃ HOÀN THÀNH.")

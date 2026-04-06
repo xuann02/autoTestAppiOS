@@ -1,9 +1,10 @@
-appId: ${appId}
+appId: ${APP_ID}
 ---
+- stopApp
 - clearState: ${APP_ID}
 - launchApp:
-    appId: ${appId}
+    appId: ${APP_ID}
 - runFlow:
     file: appModul.yaml
     env:
-      appId: ${appId}
+      appId: ${APP_ID}

@@ -7,15 +7,15 @@ appId: ${appId}
 
 # - runFlow: app/Login/login.yaml
 
-# - runFlow:
-#     file: app/Daily/dailyChallenge.yaml
-#     env:
-#       appId: ${appId}
+- runFlow:
+    file: app/Daily/dailyChallenge.yaml
+    env:
+      appId: ${appId}
 
-# - runFlow:
-#     file: app/Study/study.yaml
-#     env:
-#       appId: ${appId}
+- runFlow:
+    file: app/Study/study.yaml
+    env:
+      appId: ${appId}
 
 - runFlow:
     file: app/Audio/TC01.yaml
